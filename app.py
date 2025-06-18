@@ -11,6 +11,7 @@ model = joblib.load('House_Price_Model.pk1')
 
 st.title('🏠 House Price Predictor')
 
+# Get the user input for the house price prediction 
 def get_user_input():
     longitude = st.number_input("longitude", value=34.0)
     latitude = st.number_input('latitude', value=-118.0)
@@ -24,6 +25,7 @@ def get_user_input():
     rooms_per_house = total_bedrooms/total_rooms
     bedroom_ratio = total_rooms/households
 
+    # Create a dictionary to hold the user input data 
     user_data = {
         'longitude': longitude,
         'Latitude': latitude,
@@ -49,10 +51,7 @@ def prepare_input(data, feature_list):
     input_data = {feature: data.get(feature, 0) for feature in feature_list}
     return np.array([list(input_data.values())])
 
-# One-hot encoding for zone 
-#zone_options = ['<1H OCEAN', 'INLAND', 'ISLAND', 'NEAR BAY', 'NEAR OCEAN']
-#zone_encoded = [1 if zone == z else 0 for z in zone_options]
-#final_zone = [item for item in zone_encoded]
+# Define the features used in the model 
 
 features = [
     'longitude', 'latitude', 'housing_median_age','total_rooms', 'total_bedrooms', 
@@ -64,13 +63,5 @@ if st.button('Predict'):
     print(input_array)
     prediction = model.predict(input_array)
     st.subheader('Predicted Price')
-    st.write(f'${prediction[0]:,.2f}')
-    #features = np.array([[latitude, longitude, total_rooms, total_bedrooms, population, households, final_zone, median_income, bedroom_ratio, household_rooms]])
-
-    #scale the input 
-    #features_scaled = Scaler.transform(features)
-
-    #Predict 
-    #predict_price = model.predict(features)[0]
-
-    #st.success(f'💰 Predicted House Price: ${predicted_price:,.2f}')
+    st.write(f'💰 Predicted House Price: ${prediction[0]:,.2f}')
+    
